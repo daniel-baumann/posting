@@ -1,3 +1,9 @@
+## 2.9.2 [14th October 2025]
+
+### Fixed
+
+- Fixed path parameters interference across requests.
+
 ## 2.9.1 [24th September 2025]
 
 ### Fixed

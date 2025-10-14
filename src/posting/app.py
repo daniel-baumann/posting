@@ -872,17 +872,19 @@ class MainScreen(Screen[None]):
         except NoMatches:
             table = None  # type: ignore[assignment]
 
-        if table and table.row_count > 0:
-            # Use current table order/values to preserve by index.
+        if preferred_values is not None:
+            # When preferred values are provided (e.g. loading a request),
+            # map by name to ensure values follow their placeholders.
+            for name in names:
+                values_by_index.append(str(preferred_values.get(name, "")))
+        elif table and table.row_count > 0:
+            # Otherwise, when editing the current URL, preserve values by index
+            # from the existing table rows.
             for row_index in range(table.row_count):
                 row = table.get_row_at(row_index)
                 cell = row[1]
                 val = cell.plain if isinstance(cell, Text) else cell
                 values_by_index.append(str(val))
-        elif preferred_values:
-            # Fall back to provided preferred values, preserving their given order.
-            # Dicts preserve insertion order, which should correspond to saved order.
-            values_by_index.extend(list(preferred_values.values()))
 
         # Build new rows, mapping values by index.
         rows = [
